@@ -7,11 +7,14 @@ export const CONFIG_GAME = {
 }
 
 export const CONFIG_PLAYER = {
-    'width': 50,
-    'height': 50,
-    'left': 0,
-    'top': 0,
-    'color': 'blue',
+    width: 50,
+    height: 50,
+    left: 0,
+    top: 0,
+    color: 'blue',
+    health: 100,
+    speedMove: 2,
+    direction: 'down',
     icon: {
         up: '/public/img/tank_player_up.svg',
         down: '/public/img/tank_player_down.svg',
@@ -19,11 +22,9 @@ export const CONFIG_PLAYER = {
         left: '/public/img/tank_player_left.svg'
     },
     audio: {
+        volume: 0.1,
         move: '/public/audio/tank-track.mp3'
-    },
-    'health': 100,
-    'speedMove': 2,
-    'direction': 'down'
+    }
 }
 
 export const CONFIG_ENEMY = {
@@ -42,15 +43,29 @@ export const CONFIG_ENEMY = {
     'speedMove': 5
 }
 
-export const CONFIG_MATERIAL_BRICK_BLOCK = {
-    id: 1,
-    width: 25,
-    height: 25,
-    color: 'white',
-    icon: '/public/img/bricks.webp',
-    audio: '/public/audio/bricks-break.mp3',
-    collidable: true,
-    destructible: true
+export const BLOCK_MATERIALS = {
+    1: {
+        name: 'brick',
+        width: 25,
+        height: 25,
+        color: 'white',
+        icon: '/public/img/bricks.webp',
+        audio: '/public/audio/bricks-break.mp3',
+        health: 100,
+        collidable: true,
+        destructible: true
+    },
+    2: {
+        name: 'block',
+        width: 25,
+        height: 25,
+        color: 'white',
+        icon: '/public/img/block.svg',
+        audio: '/public/audio/block.mp3',
+        health: 100,
+        collidable: true,
+        destructible: false
+    }
 }
 
 export const CONFIG_ATTACK = {

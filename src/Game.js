@@ -69,25 +69,15 @@ export default class Game {
     }
 
     _handleKeyDown(event) {
-        this.move();
         this._keys[event.key] = true;
-        
+
     }
 
     _handleKeyUp(event) {
-        this.move(true);
+        this._player.audioStop('move');
         delete this._keys[event.key];
     }
 
-    move(pause = false) {
-        if (pause) {
-            this._playerAudio.audio.pause(); // Detener el audio actual si se está reproduciendo
-            this._playerAudio.audio.currentTime = 0; // Reiniciar el tiempo de reproducción al inicio
-        }
-        if (!pause) {
-            this._playerAudio.audio.play(); // Reproducir el audio de movimiento
-        }
-    }
 
     _init() {
         this.gameContainer.style.backgroundColor = this._backgroundColor;
@@ -98,10 +88,7 @@ export default class Game {
     _loop() {
         this.clear();
 
-
-        if (this._player) {
-            this.renderPlayer(this._player);
-        }
+        if (this._player) this.renderPlayer();
 
         if (this._attacks.length > 0) {
             this._attacks.map((attack, index) => {
@@ -125,11 +112,15 @@ export default class Game {
         requestAnimationFrame(() => this._loop());
     }
 
-    renderPlayer(player) {
+    renderPlayer() {
         this._playerMove();
-        // this._context.fillStyle = player.color;
-        // this._context.fillRect(player.left, player.top, player.width, player.height);
-        this._context.drawImage(player.icon, player.left, player.top, player.width, player.height);
+
+        if (this._player.icon === undefined) {
+            this._context.fillStyle = this._player.color;
+            this._context.fillRect(this._player.left, this._player.top, this._player.width, this._player.height);
+        } else {
+            this._context.drawImage(this._player.icon, this._player.left, this._player.top, this._player.width, this._player.height);
+        }
     }
 
     renderEnemy(enemy) {
@@ -170,13 +161,25 @@ export default class Game {
 
     _playerMove() {
         if (this._keys['ArrowUp'] || this._keys['w']) {
-            if (this._player.top > 0 && !this._playerCollitionBlock('up')) this._player.moveUp();
+            if (this._player.top > 0 && !this._playerCollitionBlock('up')) {
+                this._player.audioPlay('move');
+                this._player.moveUp();
+            }
         } else if (this._keys['ArrowDown'] || this._keys['s']) {
-            if ((this._player.top + this._player.height) < this._height && !this._playerCollitionBlock('down')) this._player.moveDown();
+            if ((this._player.top + this._player.height) < this._height && !this._playerCollitionBlock('down')) {
+                this._player.audioPlay('move');
+                this._player.moveDown();
+            }
         } else if (this._keys['ArrowLeft'] || this._keys['a']) {
-            if (this._player.left > 0 && !this._playerCollitionBlock('left')) this._player.moveLeft();
+            if (this._player.left > 0 && !this._playerCollitionBlock('left')) {
+                this._player.audioPlay('move');
+                this._player.moveLeft();
+            }
         } else if (this._keys['ArrowRight'] || this._keys['d']) {
-            if ((this._player.left + this._player.width) < this._width && !this._playerCollitionBlock('right')) this._player.moveRight();
+            if ((this._player.left + this._player.width) < this._width && !this._playerCollitionBlock('right')) {
+                this._player.audioPlay('move');
+                this._player.moveRight();
+            }
         }
     }
 
@@ -225,7 +228,7 @@ export default class Game {
         };
 
         this._blocks.map((block, index) => {
-            if (!block.destructible) return;
+            if (!block.collidable) return;
 
             if (!collition) {
                 const block_tmp = {
@@ -234,7 +237,7 @@ export default class Game {
                     top: block.top,
                     bottom: block.top + block.height
                 };
-    
+
                 if (attack_tmp.left <= block_tmp.right && attack_tmp.right >= block_tmp.left &&
                     attack_tmp.top <= block_tmp.bottom && attack_tmp.bottom >= block_tmp.top) {
                     collition = true;
@@ -250,8 +253,8 @@ export default class Game {
                 }
 
                 if (collition) {
-                    block.destroy();
-                    this._blocks.splice(index, 1);
+                    block.attacked(attack.damage);
+                    if (block.health === 0) this._blocks.splice(index, 1);
                 }
             }
         });
