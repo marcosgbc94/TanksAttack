@@ -25,7 +25,30 @@ window.addEventListener('load', () => {
 
     window.addEventListener('keypress', (key) => {
         if (key.code === 'Space') {
-            game.attacks = new Attack({...CONFIG_ATTACK, left: player.left, top: player.top, direction: player.direction});
+            let attackLeft = 0;
+            let attackTop = 0;
+            
+            if (player.direction === 'up') {
+                attackLeft = player.left + (player.width/2);
+                attackTop = player.top;
+            }
+
+            if (player.direction === 'down') {
+                attackLeft = player.left + (player.width/2);
+                attackTop = player.top + player.height;
+            }
+
+            if (player.direction === 'left') {
+                attackLeft = player.left;
+                attackTop = player.top + (player.height/2) - (CONFIG_ATTACK.height/2);
+            }
+
+            if (player.direction === 'right') {
+                attackLeft = player.left + player.width;
+                attackTop = player.top + (player.height/2) - (CONFIG_ATTACK.height/2);
+            }
+
+            game.attacks = new Attack({...CONFIG_ATTACK, left: attackLeft, top: attackTop, direction: player.direction});
         }
     })
 });

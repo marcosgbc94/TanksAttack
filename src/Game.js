@@ -6,6 +6,16 @@ export default class Game {
         this._height = params.height || 500;
         this._backgroundColor = params.backgroundColor || 'black';
         this._keys = {};
+        this._attack = {
+            height: 10,
+            width: 2
+        }
+        this._playerAudio = {
+            audio: new Audio()
+        }
+
+        this._playerAudio.audio.src = '/public/audio/tank-track.mp3';
+        this._playerAudio.audio.volume = .1;
 
         this._player = null;
         this._enemies = [];
@@ -59,11 +69,24 @@ export default class Game {
     }
 
     _handleKeyDown(event) {
+        this.move();
         this._keys[event.key] = true;
+        
     }
 
     _handleKeyUp(event) {
+        this.move(true);
         delete this._keys[event.key];
+    }
+
+    move(pause = false) {
+        if (pause) {
+            this._playerAudio.audio.pause(); // Detener el audio actual si se está reproduciendo
+            this._playerAudio.audio.currentTime = 0; // Reiniciar el tiempo de reproducción al inicio
+        }
+        if (!pause) {
+            this._playerAudio.audio.play(); // Reproducir el audio de movimiento
+        }
     }
 
     _init() {
@@ -82,7 +105,7 @@ export default class Game {
 
         if (this._attacks.length > 0) {
             this._attacks.map((attack, index) => {
-                const attackRendering = this.renderAttack(attack); console.log(attackRendering)
+                const attackRendering = this.renderAttack(attack);
                 if (attackRendering === true) this._attacks.splice(index, 1);
             });
         }
@@ -104,8 +127,9 @@ export default class Game {
 
     renderPlayer(player) {
         this._playerMove();
-        this._context.fillStyle = player.color;
-        this._context.fillRect(player.left, player.top, player.width, player.height);
+        // this._context.fillStyle = player.color;
+        // this._context.fillRect(player.left, player.top, player.width, player.height);
+        this._context.drawImage(player.icon, player.left, player.top, player.width, player.height);
     }
 
     renderEnemy(enemy) {
@@ -114,11 +138,31 @@ export default class Game {
     }
 
     renderBlock(block) {
-        this._context.fillStyle = block.color;
-        this._context.fillRect(block.left, block.top, block.width, block.height);
+        // this._context.fillStyle = block.color;
+        // this._context.fillRect(block.left, block.top, block.width, block.height);
+        this._context.drawImage(block.icon, block.left, block.top, block.width, block.height);
     }
 
     renderAttack(attack) {
+        switch (attack.direction) {
+            case 'up':
+                attack.height = this._attack.height;
+                attack.width = this._attack.width;
+                break;
+            case 'down':
+                attack.height = this._attack.height;
+                attack.width = this._attack.width;
+                break;
+            case 'left':
+                attack.height = this._attack.width;
+                attack.width = this._attack.height;
+                break;
+            case 'right':
+                attack.height = this._attack.width;
+                attack.width = this._attack.height;
+                break;
+        }
+
         this._context.fillStyle = attack.color;
         this._context.fillRect(attack.left, attack.top, attack.width, attack.height);
         return this._AttackCollitionLimit(attack);
@@ -206,6 +250,7 @@ export default class Game {
                 }
 
                 if (collition) {
+                    block.destroy();
                     this._blocks.splice(index, 1);
                 }
             }

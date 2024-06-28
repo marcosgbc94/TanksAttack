@@ -7,7 +7,12 @@ export default class Character {
         this._color = params.color || 'red'; // Color predeterminado si no se proporciona
         this._health = params.health || 100;
         this._speedMove = params.speedMove || 5;
-        this._direction = params.direction || 'right'
+        this._direction = params.direction || 'right';
+        this._icons = params.icon;
+        this._audio = new Audio();
+        this._audio.src = params.audio !== undefined ? params.audio.move : null;
+        this._icon = new Image();
+        this._icon.src = params.icon.down ? params.icon.down : null;
     }
 
     get width() {
@@ -48,24 +53,40 @@ export default class Character {
         return this._direction;
     }
 
+    get icon() {
+        return this._icon;
+    }
+
+    get audio() {
+        return this._audio;
+    }
+
     moveUp() {
+        
         this._top -= this._speedMove; // Mover hacia arriba
         this._direction = 'up';
+        this._icon.src = this._icons.up;
     }
 
     moveDown() {
+        
         this._top += this._speedMove; // Mover hacia abajo
         this._direction = 'down';
+        this._icon.src = this._icons.down;
     }
 
     moveLeft() {
+        
         this._left -= this._speedMove; // Mover hacia la izquierda
         this._direction = 'left';
+        this._icon.src = this._icons.left;
     }
 
     moveRight() {
+        
         this._left += this._speedMove; // Mover hacia la derecha
         this._direction = 'right';
+        this._icon.src = this._icons.right;
     }
 
     get character() {

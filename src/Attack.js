@@ -18,6 +18,14 @@ export default class Attack {
         return this._height;
     }
 
+    set width(newWidth) {
+        this._width = newWidth;
+    }
+
+    set height(newHeight) {
+        this._height = newHeight;
+    }
+
     get left() {
         return this._left;
     }

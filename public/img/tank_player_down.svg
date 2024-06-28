@@ -1,0 +1,41 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96">
+	<title>tanke</title>
+	<defs>
+		<image  width="58" height="80" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADoAAABQBAMAAAC6+nsnAAAAAXNSR0IB2cksfwAAAB5QTFRFqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwX2UJtqwAAAAp0Uk5TAFO8/4SIScDwTDPCLG8AAABUSURBVHicY2QQUmTAAd7dZ2TRxyXJwCDLmHwBtywzY/EB3LIsjM0bcMuyMhrjlmRgGJUdlR2VHZUdlR2VHZUdlYXK4m9R4G+N4GvJsBFoBeFtQQEAvMoaMEEqaDMAAAAASUVORK5CYII="/>
+		<image  width="47" height="16" id="img2" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC8AAAAQBAMAAAB0JTvnAAAAAXNSR0IB2cksfwAAAB5QTFRFbGUdbGUdbGUdbGUdbGUdbGUdbGUdbGUdbGUdbGUd4DBqOQAAAAp0Uk5TAFO8/4SIScDwTDPCLG8AAABFSURBVHicY2QQUmTAAP/vfWBk0ccUZ2BgOs2YfAGbBIMuY/EBrBK2jM0bsEr4MhpjFWf4O7ASOJ2L04M4giQWdyDiCnYAadwYAd1WTy8AAAAASUVORK5CYII="/>
+		<image  width="42" height="29" id="img3" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAdBAMAAAAukuN9AAAAAXNSR0IB2cksfwAAAB5QTFRFbGUdbGUdbGUdbGUdbGUdbGUdbGUdbGUdbGUdbGUd4DBqOQAAAAp0Uk5TAFO8/4SIScDwTDPCLG8AAABESURBVHicY2QQUmRAA+/uM7LoowsyMMgyJl/AFGVmLD6AKcrC2LwBU5SV0RhTkIFhVHQQiWKPN+xxjC09sOFIO1jTGQAEhA/Ul5o3QwAAAABJRU5ErkJggg=="/>
+		<image  width="4" height="36" id="img4" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAkAQMAAACUkwkLAAAAAXNSR0IB2cksfwAAAAZQTFRFbGUdbGUdE7HA7gAAAAJ0Uk5T0v/on4UoAAAAD0lEQVR4nGNMYPxABZgAAJw4IMUNyhp/AAAAAElFTkSuQmCC"/>
+		<image  width="20" height="96" id="img5" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAABgBAMAAADvFE/pAAAAAXNSR0IB2cksfwAAAB5QTFRFbGUdbGUdbGUdbGUdbGUdbGUdbGUdbGUdbGUdbGUd4DBqOQAAAAp0Uk5TAFO8/4SIScDwTDPCLG8AAABDSURBVHicY2QQUmQAgXf3GVn0GSBAljH5ApTJzFh8AMpkYWzeAGWyMhozwMAoc5Q5yhz8TKTMi5Sl4RmdDTn7IwoFABSIHXDZdFbpAAAAAElFTkSuQmCC"/>
+		<image  width="15" height="4" id="img6" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAEBAMAAACjP3i6AAAAAXNSR0IB2cksfwAAABtQTFRFqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXozj8JQAAAAl0Uk5TR9ewVP/QDScgd2bwwAAAABhJREFUeJxjZBRgAAF+RhMIgwfBSIcwOAEUvgFFngL8TQAAAABJRU5ErkJggg=="/>
+		<image  width="15" height="4" id="img7" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAEBAMAAACjP3i6AAAAAXNSR0IB2cksfwAAABtQTFRFqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXozj8JQAAAAl0Uk5TR9ewVP/QDScgd2bwwAAAABhJREFUeJxjZBRgAAF+RhMIgwfBSIcwOAEUvgFFngL8TQAAAABJRU5ErkJggg=="/>
+		<image  width="15" height="4" id="img8" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAEBAMAAACjP3i6AAAAAXNSR0IB2cksfwAAABtQTFRFqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXozj8JQAAAAl0Uk5TR9ewVP/QDScgd2bwwAAAABhJREFUeJxjZBRgAAF+RhMIgwfBSIcwOAEUvgFFngL8TQAAAABJRU5ErkJggg=="/>
+		<image  width="15" height="4" id="img9" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAEBAMAAACjP3i6AAAAAXNSR0IB2cksfwAAABtQTFRFqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXozj8JQAAAAl0Uk5TR9ewVP/QDScgd2bwwAAAABhJREFUeJxjZBRgAAF+RhMIgwfBSIcwOAEUvgFFngL8TQAAAABJRU5ErkJggg=="/>
+		<image  width="20" height="96" id="img10" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAABgBAMAAADvFE/pAAAAAXNSR0IB2cksfwAAAB5QTFRFbGUdbGUdbGUdbGUdbGUdbGUdbGUdbGUdbGUdbGUd4DBqOQAAAAp0Uk5TAFO8/4SIScDwTDPCLG8AAABDSURBVHicY2QQUmQAgXf3GVn0GSBAljH5ApTJzFh8AMpkYWzeAGWyMhozwMAoc5Q5yhz8TKTMi5Sl4RmdDTn7IwoFABSIHXDZdFbpAAAAAElFTkSuQmCC"/>
+		<image  width="15" height="4" id="img11" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAEBAMAAACjP3i6AAAAAXNSR0IB2cksfwAAABtQTFRFqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXozj8JQAAAAl0Uk5TR9ewVP/QDScgd2bwwAAAABhJREFUeJxjZBRgAAF+RhMIgwfBSIcwOAEUvgFFngL8TQAAAABJRU5ErkJggg=="/>
+		<image  width="15" height="4" id="img12" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAEBAMAAACjP3i6AAAAAXNSR0IB2cksfwAAABtQTFRFqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXozj8JQAAAAl0Uk5TR9ewVP/QDScgd2bwwAAAABhJREFUeJxjZBRgAAF+RhMIgwfBSIcwOAEUvgFFngL8TQAAAABJRU5ErkJggg=="/>
+		<image  width="15" height="4" id="img13" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAEBAMAAACjP3i6AAAAAXNSR0IB2cksfwAAABtQTFRFqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXozj8JQAAAAl0Uk5TR9ewVP/QDScgd2bwwAAAABhJREFUeJxjZBRgAAF+RhMIgwfBSIcwOAEUvgFFngL8TQAAAABJRU5ErkJggg=="/>
+		<image  width="15" height="4" id="img14" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAEBAMAAACjP3i6AAAAAXNSR0IB2cksfwAAABtQTFRFqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXqZwXozj8JQAAAAl0Uk5TR9ewVP/QDScgd2bwwAAAABhJREFUeJxjZBRgAAF+RhMIgwfBSIcwOAEUvgFFngL8TQAAAABJRU5ErkJggg=="/>
+	</defs>
+	<style>
+		.s0 { fill: #000000 } 
+	</style>
+	<path id="Background" class="s0" d="m0 0z"/>
+	<use id="Forma 3" href="#img1" x="19" y="8"/>
+	<use id="Forma 4" href="#img2" x="25" y="14"/>
+	<use id="Forma 5" href="#img3" x="28" y="34"/>
+	<use id="Forma 6" href="#img4" x="47" y="60"/>
+	<g id="Carpeta 1">
+		<use id="Forma 1" href="#img5" x="0" y="0"/>
+		<use id="Forma 2" href="#img6" x="2" y="78"/>
+		<use id="Forma 2 copy" href="#img7" x="2" y="15"/>
+		<use id="Forma 2 copy 2" href="#img8" x="2" y="35"/>
+		<use id="Forma 2 copy 3" href="#img9" x="2" y="58"/>
+	</g>
+	<g id="Carpeta 1 copy">
+		<use id="Forma 1" href="#img10" x="76" y="0"/>
+		<use id="Forma 2" href="#img11" x="78" y="78"/>
+		<use id="Forma 2 copy" href="#img12" x="78" y="15"/>
+		<use id="Forma 2 copy 2" href="#img13" x="78" y="35"/>
+		<use id="Forma 2 copy 3" href="#img14" x="78" y="58"/>
+	</g>
+</svg>
