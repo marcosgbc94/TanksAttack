@@ -1,5 +1,6 @@
 export default class Attack {
     constructor(params = {}) {
+        this._player = (params.player === undefined || params.player === null ? true : params.player);
         this._width = params.width || 10;
         this._height = params.height || 10;
         this._top = params.top || 0;
@@ -10,59 +11,37 @@ export default class Attack {
         this._direction = params.direction || 'down';
     }
 
-    get width() {
-        return this._width;
-    }
-
-    get height() {
-        return this._height;
-    }
+    get player() { return this._player; }
+    get width() { return this._width; }
+    get height() { return this._height; }
+    get left() { return this._left; }
+    get top() { return this._top; }
+    get color() { return this._color; }
+    get speedMove() { return this._speedMove; }
+    get damage() { return this._damage; }
+    get direction() { return this._direction; }
 
     set width(newWidth) {
-        this._width = newWidth;
+        if (typeof newWidth === 'number') this._width = newWidth;
     }
 
     set height(newHeight) {
-        this._height = newHeight;
-    }
-
-    get left() {
-        return this._left;
-    }
-
-    get top() {
-        return this._top;
-    }
-
-    get color() {
-        return this._color;
-    }
-
-    get speedMove() {
-        return this._speedMove;
-    }
-
-    get damage() {
-        return this._damage;
-    }
-
-    get direction() {
-        return this._direction;
+        if (typeof newHeight === 'number') this._height = newHeight;
     }
 
     moveUp() {
-        this._top -= this._speedMove; // Mover hacia arriba
+        this._top -= this._speedMove;
     }
 
     moveDown() {
-        this._top += this._speedMove; // Mover hacia abajo
+        this._top += this._speedMove;
     }
 
     moveLeft() {
-        this._left -= this._speedMove; // Mover hacia la izquierda
+        this._left -= this._speedMove;
     }
 
     moveRight() {
-        this._left += this._speedMove; // Mover hacia la derecha
+        this._left += this._speedMove;
     }
 }

@@ -1,0 +1,37 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96">
+	<title>bloque</title>
+	<defs>
+		<image  width="48" height="48" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwAgMAAAAqbBEUAAAAAXNSR0IB2cksfwAAAAlQTFRF1cLCj4+P////1yYibwAAAC1JREFUeJxjZIADxhBGijisAQzonFVQ3u8No5zBwRGdShzHgQEGUDmhDAwUcQDI1FQhCgSaXgAAAABJRU5ErkJggg=="/>
+		<image  width="48" height="48" id="img2" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwAQMAAABtzGvEAAAAAXNSR0IB2cksfwAAAANQTFRF1cLCoJ7cUQAAABBJREFUeJxjZAADxlGKOhQAIXgAMRvVRcYAAAAASUVORK5CYII="/>
+		<image  width="48" height="48" id="img3" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwAQMAAABtzGvEAAAAAXNSR0IB2cksfwAAAAZQTFRFAAAAj4+PjhL/RwAAAAJ0Uk5TAP9bkSK1AAAAN0lEQVR4nGNkAAF5RkIU8x8slPwDQhTzHwZCVH0DIYr/AwMBivEfAyHK/gAhiv0HAyHqPwMhCgAI8yuh6HvExAAAAABJRU5ErkJggg=="/>
+		<image  width="34" height="34" id="img4" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAiAQMAAAAAiZmBAAAAAXNSR0IB2cksfwAAAANQTFRF////p8QbyAAAAA9JREFUeJxjZAABxmFBAgAOvgAjuvA7gwAAAABJRU5ErkJggg=="/>
+		<image  width="48" height="48" id="img5" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwAgMAAAAqbBEUAAAAAXNSR0IB2cksfwAAAAlQTFRF1cLCj4+P////1yYibwAAAC1JREFUeJxjZIADxhBGijisAQzonFVQ3u8No5zBwRGdShzHgQEGUDmhDAwUcQDI1FQhCgSaXgAAAABJRU5ErkJggg=="/>
+		<image  width="48" height="48" id="img6" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwAQMAAABtzGvEAAAAAXNSR0IB2cksfwAAAANQTFRF1cLCoJ7cUQAAABBJREFUeJxjZAADxlGKOhQAIXgAMRvVRcYAAAAASUVORK5CYII="/>
+		<image  width="48" height="48" id="img7" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwAQMAAABtzGvEAAAAAXNSR0IB2cksfwAAAAZQTFRFAAAAj4+PjhL/RwAAAAJ0Uk5TAP9bkSK1AAAAN0lEQVR4nGNkAAF5RkIU8x8slPwDQhTzHwZCVH0DIYr/AwMBivEfAyHK/gAhiv0HAyHqPwMhCgAI8yuh6HvExAAAAABJRU5ErkJggg=="/>
+		<image  width="34" height="34" id="img8" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAiAQMAAAAAiZmBAAAAAXNSR0IB2cksfwAAAANQTFRF////p8QbyAAAAA9JREFUeJxjZAABxmFBAgAOvgAjuvA7gwAAAABJRU5ErkJggg=="/>
+		<image  width="48" height="48" id="img9" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwAQMAAABtzGvEAAAAAXNSR0IB2cksfwAAAANQTFRF1cLCoJ7cUQAAABBJREFUeJxjZAADxlGKOhQAIXgAMRvVRcYAAAAASUVORK5CYII="/>
+		<image  width="48" height="48" id="img10" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwAQMAAABtzGvEAAAAAXNSR0IB2cksfwAAAAZQTFRFAAAAj4+PjhL/RwAAAAJ0Uk5TAP9bkSK1AAAAN0lEQVR4nGNkAAF5RkIU8x8slPwDQhTzHwZCVH0DIYr/AwMBivEfAyHK/gAhiv0HAyHqPwMhCgAI8yuh6HvExAAAAABJRU5ErkJggg=="/>
+		<image  width="34" height="34" id="img11" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAiAQMAAAAAiZmBAAAAAXNSR0IB2cksfwAAAANQTFRF////p8QbyAAAAA9JREFUeJxjZAABxmFBAgAOvgAjuvA7gwAAAABJRU5ErkJggg=="/>
+	</defs>
+	<style>
+	</style>
+	<use id="Capa 2" href="#img1" x="0" y="0"/>
+	<g id="Carpeta 1">
+		<use id="Background" href="#img2" x="48" y="0"/>
+		<use id="Capa 1" href="#img3" x="48" y="0"/>
+		<use id="Forma 1" href="#img4" x="56" y="7"/>
+	</g>
+	<g id="Carpeta 1 copy">
+		<use id="Forma 1" href="#img5" x="0" y="0"/>
+	</g>
+	<g id="Carpeta 1 copy 2">
+		<use id="Background" href="#img6" x="0" y="48"/>
+		<use id="Capa 1" href="#img7" x="0" y="48"/>
+		<use id="Forma 1" href="#img8" x="8" y="55"/>
+	</g>
+	<g id="Carpeta 1 copy 3">
+		<use id="Background" href="#img9" x="48" y="48"/>
+		<use id="Capa 1" href="#img10" x="48" y="48"/>
+		<use id="Forma 1" href="#img11" x="56" y="55"/>
+	</g>
+</svg>

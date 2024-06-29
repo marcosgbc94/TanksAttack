@@ -1,9 +1,0 @@
-<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-	<title>pngegg</title>
-	<defs>
-		<image  width="416" height="512" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaAAAAIAAgMAAAC5rFC5AAAAAXNSR0IB2cksfwAAAAxQTFRF964A+OyI////XGoA7k5qMgAAAAR0Uk5T//8A//4MuwsAAAFoSURBVHic7d0xDoMwEATA5JHhkeGRSeVm0ckYodiR5hqEMTtuVxQ8HzGvuI7OVuQ9QSAQCAQCgUAgEGhx6HMy4HCiCMp55/sgEAgEAoFAIBAItDiUGxKugArci3UQCAQCgUAgEAgEWh3qFbGEsnjtsd7uDwcGgUAgEAgEAoFAoMWhDK42fOI+g29rfCAQCAQCgUAgEAg0CTpbxEahy40PBAKBQCAQCAQCgSZBGfz/jQ8EAoFAIBAIBAKBrkGjRSzXM/C2xgcCgUAgEAgEAoFAP4YyuIIPGwNoc7nxgUAgEAgEAoFAINBkqFfEEqo+UCU03PhAIBAIBAKBQCAQaDKUgT24/Wi2KlwJDjc+EAgEAoFAIBAIBJoEVYUpfyTbXtjieQ9seSAQCAQCgUAgEAi0OpSBvak+UPUGBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAL9HfQFPXP2bAo2bXoAAAAASUVORK5CYII="/>
-	</defs>
-	<style>
-	</style>
-	<use id="Background" href="#img1" x="48" y="0"/>
-</svg>

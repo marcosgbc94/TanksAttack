@@ -5,14 +5,20 @@ export default class Block {
         this._left = params.left || 0;
         this._top = params.top || 0;
         this._health = params.health || 50;
-        this._icon = new Image();
-        this._icon.src = params.icon || null;
         this._color = params.color || 'white';
-        this._audio = new Audio;
-        this._audio.src = params.audio || null;
-        this._audio.volume = 0.1;
         this._collidable = (params.collidable === null || params.collidable === undefined) ? true : params.collidable;
         this._destructible = (params.destructible === null || params.destructible === undefined) ? true : params.destructible;
+
+        if (params.icon) {
+            this._icon = new Image();
+            this._icon.src = params.icon || null;
+        }
+
+        if (params.audio) {
+            this._audio = new Audio;
+            this._audio.src = params.audio || null;
+            this._audio.volume = 0.1;
+        }
     }
 
     get width() { return this._width; }
@@ -27,7 +33,7 @@ export default class Block {
     get audio() { return this._audio; }
 
     attacked(damage) {
-        this.audioPlay();
+        if (this._audio) this.audioPlay();
         if (damage && this._destructible) {
             this._health -= damage;
 

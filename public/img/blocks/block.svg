@@ -1,0 +1,9 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96">
+	<title>bloque</title>
+	<defs>
+		<image  width="96" height="96" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAAAXNSR0IB2cksfwAAAEtQTFRF1cLCw7W1oJycj4+P0b+/yLi4tqysnJmZrqWlk5KS2MbG3c3N4NHR0sjIuLW1q6urpKSklpaW7eTk9fDw8O3t5+bm4+Pjzs7O////y6QjJQAAALZJREFUeJzt2cEKwyAQRdFOEhlobf7/O9NuUkLShVVcKKV1bDd3Vg8JHhDJwienHiMiKQIAAJgCk2yv5FIyBdz4iGmIyRTIDiZb/DVwLn30ISCy1IGLGgDrrQ54dV8Dcfb1DgAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAhP7C69QLCP2F17EXEB7nvQ4AfwauejQDlYolAPNhAJRLomJJ1T79gbRr1j+aAunSZP2jKdD+ZwAAAHg3T1n92IFmMul4AAAAAElFTkSuQmCC"/>
+	</defs>
+	<style>
+	</style>
+	<use id="Capa 2" href="#img1" x="0" y="0"/>
+</svg>

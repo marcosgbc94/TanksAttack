@@ -1,14 +1,13 @@
-import { CONFIG_GAME, CONFIG_PLAYER, CONFIG_ENEMY, BLOCK_MATERIALS, CONFIG_ATTACK } from './config.js'
+import { CONFIG_GAME, CONFIG_PLAYER, ENEMIES, BLOCK_MATERIALS } from './config.js'
 import Game from './Game.js';
-import Character from './Character.js';
 import Player from './Player.js';
 import Block from './Block.js';
-import Attack from './attack.js';
+import Enemy from './Enemy.js';
 import level_1 from './level_1.js';
 
 window.addEventListener('load', () => {
     const player = new Player(CONFIG_PLAYER);
-    const enemies = new Character(CONFIG_ENEMY);
+    const enemies = new Enemy(ENEMIES[1]);
     const game = new Game(CONFIG_GAME);
 
     level_1.length > 0 && level_1.map((block) => {
@@ -19,33 +18,4 @@ window.addEventListener('load', () => {
     game.enemies = enemies;
 
     game.start();
-
-    window.addEventListener('keypress', (key) => {
-        if (key.code === 'Space') {
-            let attackLeft = 0;
-            let attackTop = 0;
-            
-            if (player.direction === 'up') {
-                attackLeft = player.left + (player.width/2);
-                attackTop = player.top;
-            }
-
-            if (player.direction === 'down') {
-                attackLeft = player.left + (player.width/2);
-                attackTop = player.top + player.height;
-            }
-
-            if (player.direction === 'left') {
-                attackLeft = player.left;
-                attackTop = player.top + (player.height/2) - (CONFIG_ATTACK.height/2);
-            }
-
-            if (player.direction === 'right') {
-                attackLeft = player.left + player.width;
-                attackTop = player.top + (player.height/2) - (CONFIG_ATTACK.height/2);
-            }
-
-            game.attacks = new Attack({...CONFIG_ATTACK, left: attackLeft, top: attackTop, direction: player.direction});
-        }
-    })
 });
