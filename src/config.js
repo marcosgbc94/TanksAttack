@@ -1,16 +1,16 @@
 export const CONFIG_GAME = {
-    'element': '#game-container',
-    'contextType': '2d',
-    'backgroundColor': 'black',
-    'width': 900,
-    'height': 500
+    element: '#game-container',
+    contextType: '2d',
+    backgroundColor: 'black',
+    sizeQuadrant: 25,
+    countWidthQuadrant: 40,
+    countHeightQuadrant: 20
 }
 
 export const CONFIG_PLAYER = {
-    width: 40,
-    height: 40,
-    left: 0,
-    top: 0,
+    quadrants: 1.5,
+    leftQuadrant: 0,
+    topQuadrant: 0,
     color: 'blue',
     health: 100,
     speedMove: 1,
@@ -31,13 +31,10 @@ export const CONFIG_PLAYER = {
 
 export const ENEMIES = {
     1: {
-        width: 40,
-        height: 40,
-        left: 300,
-        top: 0,
+        quadrants: 1.5,
         color: 'red',
         health: 100,
-        speedMove: 0.5,
+        speedMove: .5,
         direction: 'down',
         delayShoot: 3000,
         distanceObserver: 300,
@@ -60,8 +57,7 @@ export const ENEMIES = {
 export const BLOCK_MATERIALS = {
     1: {
         name: 'brick',
-        width: 25,
-        height: 25,
+        quadrants: 1,
         color: 'red',
         icon: '/public/img/blocks/bricks.webp',
         audio: '/public/audio/bricks-break.mp3',
@@ -71,8 +67,7 @@ export const BLOCK_MATERIALS = {
     },
     2: {
         name: 'block',
-        width: 25,
-        height: 25,
+        quadrants: 1,
         color: 'white',
         icon: '/public/img/blocks/block.svg',
         audio: '/public/audio/block.mp3',
@@ -82,8 +77,7 @@ export const BLOCK_MATERIALS = {
     },
     3: {
         name: 'block_complete',
-        width: 50,
-        height: 50,
+        quadrants: 2,
         color: 'white',
         icon: '/public/img/blocks/block_complete.svg',
         audio: '/public/audio/block.mp3',
@@ -93,8 +87,7 @@ export const BLOCK_MATERIALS = {
     },
     4: {
         name: 'grass',
-        width: 50,
-        height: 50,
+        quadrants: 2,
         color: 'green',
         icon: '/public/img/blocks/grass_complete.svg',
         audio: null,

@@ -1,18 +1,15 @@
-export default [
-    { material: 1, left: 50, top: 0 },
-    { material: 1, left: 75, top: 0 },
-    { material: 1, left: 50, top: 25 },
-    { material: 1, left: 75, top: 25 },
+export const LEVEL_1_ENEMIES = [
+    {id: 1, leftQuadrant: 16, topQuadrant: 0},
+    {id: 1, leftQuadrant: 12, topQuadrant: 12}
+];
 
-    { material: 3, left: 50, top: 100 },
-    { material: 3, left: 50, top: 150 },
-    { material: 3, left: 50, top: 200 },
+export const LEVEL_1_BLOCKS = [
+    { material: 1, leftQuadrant: 2, topQuadrant: 0 },
+    { material: 1, leftQuadrant: 3, topQuadrant: 0 },
+    { material: 1, leftQuadrant: 2, topQuadrant: 1 },
+    { material: 1, leftQuadrant: 3, topQuadrant: 1 },
 
-    { material: 4, left: 50, top: 300 },
-    { material: 4, left: 50, top: 350 },
-
-    { material: 1, left: 50, top: 450 },
-    { material: 1, left: 75, top: 450 },
-    { material: 1, left: 50, top: 475 },
-    { material: 1, left: 75, top: 475 },
+    { material: 4, leftQuadrant: 4, topQuadrant: 4 },
+    { material: 3, leftQuadrant: 4, topQuadrant: 6 },
+    { material: 3, leftQuadrant: 4, topQuadrant: 8 },
 ]

@@ -1,16 +1,17 @@
-import { CONFIG_ATTACK } from './config.js'
+import { CONFIG_GAME, CONFIG_ATTACK } from './config.js'
 import Attack from './Attack.js';
 
 export default class Game {
     constructor(params = {}) {
         this._gameContainer = document.querySelector(params.container) || document.querySelector('#game-container');
         this._context = params.contextType ? this._gameContainer.getContext(params.contextType) : this._gameContainer.getContext('2d');
-        this._width = params.width || 500;
-        this._height = params.height || 500;
+        this._width = params.countWidthQuadrant * params.sizeQuadrant || 500;
+        this._height = params.countHeightQuadrant * params.sizeQuadrant || 500;
         this._backgroundColor = params.backgroundColor || 'black';
 
         this._moveKeys = ['ArrowUp', 'w', 'ArrowDown', 's', 'ArrowLeft', 'a', 'ArrowRight', 'd'];
         this._keys = {};
+        this._map = null;
 
         this._player = null;
         this._enemies = [];
@@ -51,6 +52,7 @@ export default class Game {
     }
 
     start() {
+        this._map = this._getMap();
         this._loop();
     }
 
@@ -330,7 +332,10 @@ export default class Game {
 
                 if (collition) {
                     block.attacked(attack.damage);
-                    if (block.health === 0) this._blocks.splice(index, 1);
+                    if (block.health === 0) {
+                        this._blocks.splice(index, 1);
+                        this._map = this._getMap();
+                    }
                 }
             }
         });
@@ -415,6 +420,7 @@ export default class Game {
         if (collition) {
             this._player.attacked(attack.damage);
             if (this._player.health === 0) {
+                this._player = null;
                 alert('Híjole!! perdió mi niño/a, a llorar al rincon :)');
             }
         }
@@ -677,6 +683,34 @@ export default class Game {
             return;
         }
 
-        // console.log('lejos')
+        
+    }
+
+    _getMap() {
+        const map = [];
+
+        for (let topQuadrant = 0; topQuadrant < CONFIG_GAME.countHeightQuadrant; topQuadrant++) {
+            map[topQuadrant] = [];
+            for (let leftQuadrant = 0; leftQuadrant < CONFIG_GAME.countWidthQuadrant; leftQuadrant++) {
+                map[topQuadrant][leftQuadrant] = 0;
+            }
+        }
+
+        this._blocks.forEach((block) => {
+            const { leftQuadrant, topQuadrant, quadrants, collidable } = block;
+            if (leftQuadrant >= 0 && leftQuadrant < CONFIG_GAME.countWidthQuadrant &&
+                topQuadrant >= 0 && topQuadrant < CONFIG_GAME.countHeightQuadrant && collidable) {
+                if (quadrants === 2) {
+                    map[topQuadrant][leftQuadrant] = 1;
+                    map[topQuadrant][leftQuadrant + 1] = 1;
+                    map[topQuadrant + 1][leftQuadrant] = 1;
+                    map[topQuadrant + 1][leftQuadrant + 1] = 1;
+                } else if (quadrants === 1) {
+                    map[topQuadrant][leftQuadrant] = 1;
+                }
+            }
+        });
+        
+        return map
     }
 }
