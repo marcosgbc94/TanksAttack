@@ -1,13 +1,18 @@
+import { CONFIG_GAME } from './config.js';
+
 export default class Block {
     constructor(params = {}) {
-        this._width = params.width || 50;
-        this._height = params.height || 50;
-        this._left = params.left || 0;
-        this._top = params.top || 0;
+        this._width = params.quadrants * CONFIG_GAME.sizeQuadrant || 25;
+        this._height = params.quadrants * CONFIG_GAME.sizeQuadrant || 25;
+        this._left = params.leftQuadrant * CONFIG_GAME.sizeQuadrant || 0;
+        this._top = params.topQuadrant * CONFIG_GAME.sizeQuadrant || 0;
         this._health = params.health || 50;
         this._color = params.color || 'white';
         this._collidable = (params.collidable === null || params.collidable === undefined) ? true : params.collidable;
         this._destructible = (params.destructible === null || params.destructible === undefined) ? true : params.destructible;
+        this._leftQuadrant = params.leftQuadrant || 0;
+        this._topQuadrant = params.topQuadrant || 0;
+        this._quadrants = params.quadrants || 1;
 
         if (params.icon) {
             this._icon = new Image();
@@ -25,6 +30,9 @@ export default class Block {
     get height() { return this._height; }
     get left() { return this._left; }
     get top() { return this._top; }
+    get leftQuadrant() { return this._leftQuadrant; }
+    get topQuadrant() { return this._topQuadrant; }
+    get quadrants() { return this._quadrants; }
     get health() { return this._health; }
     get color() { return this._color; }
     get collidable() { return this._collidable; }

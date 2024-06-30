@@ -1,9 +1,12 @@
+import { CONFIG_GAME } from './config.js';
 export default class Character {
     constructor(params = {}) {
-        this._width = params.width || 50;
-        this._height = params.height || 50;
-        this._left = params.left || 0;
-        this._top = params.top || 0;
+        this._width = params.quadrants * CONFIG_GAME.sizeQuadrant || 25;
+        this._height = params.quadrants * CONFIG_GAME.sizeQuadrant || 25;
+        this._left = params.leftQuadrant * CONFIG_GAME.sizeQuadrant || 0;
+        this._top = params.topQuadrant * CONFIG_GAME.sizeQuadrant || 0;
+        this._leftQuadrant = params.leftQuadrant || 0;
+        this._topQuadrant = params.topQuadrant || 0;
         this._color = params.color || 'red';
         this._health = params.health || 100;
         this._speedMove = params.speedMove || 5;
@@ -51,24 +54,46 @@ export default class Character {
         }
     }
 
+    set direction(newDirection) {
+        if (typeof newDirection === 'string') {
+            this._direction = newDirection;
+
+            if (this._icon && this._icons) {
+                this._icon.src = this._icons[newDirection];
+            }
+        }
+    }
+
     moveUp() {
         this._top -= this._speedMove;
         this._direction = 'up';
+        if (this._icon && this._icons) {
+            this._icon.src = this._icons.up;
+        }
     }
 
     moveDown() {
         this._top += this._speedMove;
         this._direction = 'down';
+        if (this._icon && this._icons) {
+            this._icon.src = this._icons.down;
+        }
     }
 
     moveLeft() {
         this._left -= this._speedMove;
         this._direction = 'left';
+        if (this._icon && this._icons) {
+            this._icon.src = this._icons.left;
+        }
     }
 
     moveRight() {
         this._left += this._speedMove;
         this._direction = 'right';
+        if (this._icon && this._icons) {
+            this._icon.src = this._icons.right;
+        }
     }
 
     attacked(damage) {

@@ -1,12 +1,12 @@
-import { CONFIG_ATTACK } from './config.js'
+import { CONFIG_GAME, CONFIG_ATTACK } from './config.js'
 import Attack from './Attack.js';
 
 export default class Game {
     constructor(params = {}) {
         this._gameContainer = document.querySelector(params.container) || document.querySelector('#game-container');
         this._context = params.contextType ? this._gameContainer.getContext(params.contextType) : this._gameContainer.getContext('2d');
-        this._width = params.width || 500;
-        this._height = params.height || 500;
+        this._width = params.countWidthQuadrant * params.sizeQuadrant || 500;
+        this._height = params.countHeightQuadrant * params.sizeQuadrant || 500;
         this._backgroundColor = params.backgroundColor || 'black';
 
         this._moveKeys = ['ArrowUp', 'w', 'ArrowDown', 's', 'ArrowLeft', 'a', 'ArrowRight', 'd'];
@@ -16,6 +16,8 @@ export default class Game {
         this._enemies = [];
         this._blocks = [];
         this._attacks = [];
+
+        this._map = null;
 
         window.addEventListener('keydown', this._handleKeyDown.bind(this));
         window.addEventListener('keyup', this._handleKeyUp.bind(this));
@@ -51,6 +53,7 @@ export default class Game {
     }
 
     start() {
+        this._map = this._getMap();
         this._loop();
     }
 
@@ -75,7 +78,8 @@ export default class Game {
         if (this._enemies.length > 0) {
             this._enemies.map((enemy) => {
                 this.renderEnemy(enemy);
-                this.chase();
+                // this._enemyMove(enemy);
+                // this._enemyMoveCollition(enemy, 'up');
             });
         }
 
@@ -89,6 +93,7 @@ export default class Game {
     }
 
     _handleKeyDown(event) {
+        this._keys = [];
         if (event.code === 'Space') {
             this._playerAttack();
         } else {
@@ -179,6 +184,8 @@ export default class Game {
             }
         }
     }
+
+    // ATTACKS
 
     _playerAttack() {
         if (!(this._lastAttackTime === undefined || (Date.now() - this._lastAttackTime) >= this._player.delayShoot)) return;
@@ -325,7 +332,10 @@ export default class Game {
 
                 if (collition) {
                     block.attacked(attack.damage);
-                    if (block.health === 0) this._blocks.splice(index, 1);
+                    if (block.health === 0) {
+                        this._blocks.splice(index, 1);
+                        this._map = this._getMap();
+                    }
                 }
             }
         });
@@ -378,7 +388,6 @@ export default class Game {
 
     _playerCollitionBlock(move) {
         let collition = false;
-        const playerSpeedMove = (this._player.speedMove / 2);
 
         const player_tmp = {
             left: this._player.left,
@@ -399,38 +408,87 @@ export default class Game {
 
             switch (move) {
                 case 'left':
-                    player_tmp.left -= playerSpeedMove;
-                    player_tmp.right -= playerSpeedMove;
-
-                    if (player_tmp.left <= block_tmp.right && player_tmp.right >= block_tmp.left &&
-                        player_tmp.top <= block_tmp.bottom && player_tmp.bottom >= block_tmp.top) {
+                    if (player_tmp.left < block_tmp.right && player_tmp.right > block_tmp.left &&
+                        player_tmp.top < block_tmp.bottom && player_tmp.bottom > block_tmp.top) {
+                        this._player.left = block_tmp.right + 1;
                         collition = true;
                     }
                     break;
                 case 'right':
-                    player_tmp.left += playerSpeedMove;
-                    player_tmp.right += playerSpeedMove;
-
-                    if (player_tmp.right >= block_tmp.left && player_tmp.left <= block_tmp.right &&
-                        player_tmp.top <= block_tmp.bottom && player_tmp.bottom >= block_tmp.top) {
+                    console.log(player_tmp.right > block_tmp.left && player_tmp.left < block_tmp.right &&
+                        player_tmp.top < block_tmp.bottom && player_tmp.bottom > block_tmp.top)
+                    if (player_tmp.right > block_tmp.left && player_tmp.left < block_tmp.right &&
+                        player_tmp.top < block_tmp.bottom && player_tmp.bottom > block_tmp.top) {
+                        // this._player.left = block_tmp.left - 1;
                         collition = true;
                     }
                     break;
                 case 'up':
-                    player_tmp.top -= playerSpeedMove;
-                    player_tmp.bottom -= playerSpeedMove;
-
-                    if (player_tmp.top <= block_tmp.bottom && player_tmp.bottom >= block_tmp.top &&
-                        player_tmp.left <= block_tmp.right && player_tmp.right >= block_tmp.left) {
+                    if (player_tmp.top < block_tmp.bottom && player_tmp.bottom > block_tmp.top &&
+                        player_tmp.left < block_tmp.right && player_tmp.right > block_tmp.left) {
+                        this._player.top = block_tmp.bottom + 1;
                         collition = true;
                     }
                     break;
                 case 'down':
-                    player_tmp.top += playerSpeedMove;
-                    player_tmp.bottom += playerSpeedMove;
+                    if (player_tmp.bottom > block_tmp.top && player_tmp.top < block_tmp.bottom &&
+                        player_tmp.left < block_tmp.right && player_tmp.right > block_tmp.left) {
+                        this._player.top = block_tmp.top - 1;
+                        collition = true;
+                    }
+                    break;
+            }
+        });
 
-                    if (player_tmp.bottom >= block_tmp.top && player_tmp.top <= block_tmp.bottom &&
-                        player_tmp.left <= block_tmp.right && player_tmp.right >= block_tmp.left) {
+        return collition;
+    }
+
+    _enemyCollitionBlock(enemy, move) {
+        let collition = false;
+
+        const enemy_tmp = {
+            left: this._enemy.left,
+            right: this._enemy.left + this._enemy.width,
+            top: this._enemy.top,
+            bottom: this._enemy.top + this._enemy.height
+        };
+
+        this._blocks.map((block) => {
+            if (!block.collidable) return;
+
+            const block_tmp = {
+                left: block.left,
+                right: block.left + block.width,
+                top: block.top,
+                bottom: block.top + block.height
+            };
+
+            switch (move) {
+                case 'left':
+                    if (enemy_tmp.left < block_tmp.right && enemy_tmp.right > block_tmp.left &&
+                        enemy_tmp.top < block_tmp.bottom && enemy_tmp.bottom > block_tmp.top) {
+                        this._enemy.left = this._enemy.left + 4;
+                        collition = true;
+                    }
+                    break;
+                case 'right':
+                    if (enemy_tmp.right > block_tmp.left && enemy_tmp.left < block_tmp.right &&
+                        enemy_tmp.top < block_tmp.bottom && enemy_tmp.bottom > block_tmp.top) {
+                        this._enemy.left = this._enemy.left - 4;
+                        collition = true;
+                    }
+                    break;
+                case 'up':
+                    if (enemy_tmp.top < block_tmp.bottom && enemy_tmp.bottom > block_tmp.top &&
+                        enemy_tmp.left < block_tmp.right && enemy_tmp.right > block_tmp.left) {
+                        this._enemy.top = this._enemy.top + 4;
+                        collition = true;
+                    }
+                    break;
+                case 'down':
+                    if (enemy_tmp.bottom > block_tmp.top && enemy_tmp.top < block_tmp.bottom &&
+                        enemy_tmp.left < block_tmp.right && enemy_tmp.right > block_tmp.left) {
+                        this._enemy.top = this._enemy.top + 4;
                         collition = true;
                     }
                     break;
@@ -442,7 +500,6 @@ export default class Game {
 
     _playerCollitionEnemy(move) {
         let collition = false;
-        const playerSpeedMove = (this._player.speedMove / 2);
 
         const player_tmp = {
             left: this._player.left,
@@ -461,38 +518,30 @@ export default class Game {
 
             switch (move) {
                 case 'left':
-                    player_tmp.left -= playerSpeedMove;
-                    player_tmp.right -= playerSpeedMove;
-
-                    if (player_tmp.left <= enemy_tmp.right && player_tmp.right >= enemy_tmp.left &&
-                        player_tmp.top <= enemy_tmp.bottom && player_tmp.bottom >= enemy_tmp.top) {
+                    if (player_tmp.left < enemy_tmp.right && player_tmp.right > enemy_tmp.left &&
+                        player_tmp.top < enemy_tmp.bottom && player_tmp.bottom > enemy_tmp.top) {
+                        this._player.left = this._player.left + 4;
                         collition = true;
                     }
                     break;
                 case 'right':
-                    player_tmp.left += playerSpeedMove;
-                    player_tmp.right += playerSpeedMove;
-
-                    if (player_tmp.right >= enemy_tmp.left && player_tmp.left <= enemy_tmp.right &&
-                        player_tmp.top <= enemy_tmp.bottom && player_tmp.bottom >= enemy_tmp.top) {
+                    if (player_tmp.right > enemy_tmp.left && player_tmp.left < enemy_tmp.right &&
+                        player_tmp.top < enemy_tmp.bottom && player_tmp.bottom > enemy_tmp.top) {
+                        this._player.left = this._player.left - 4;
                         collition = true;
                     }
                     break;
                 case 'up':
-                    player_tmp.top -= playerSpeedMove;
-                    player_tmp.bottom -= playerSpeedMove;
-
-                    if (player_tmp.top <= enemy_tmp.bottom && player_tmp.bottom >= enemy_tmp.top &&
-                        player_tmp.left <= enemy_tmp.right && player_tmp.right >= enemy_tmp.left) {
+                    if (player_tmp.top < enemy_tmp.bottom && player_tmp.bottom > enemy_tmp.top &&
+                        player_tmp.left < enemy_tmp.right && player_tmp.right > enemy_tmp.left) {
+                        this._player.top = this._player.top + 4;
                         collition = true;
                     }
                     break;
                 case 'down':
-                    player_tmp.top += playerSpeedMove;
-                    player_tmp.bottom += playerSpeedMove;
-
-                    if (player_tmp.bottom >= enemy_tmp.top && player_tmp.top <= enemy_tmp.bottom &&
-                        player_tmp.left <= enemy_tmp.right && player_tmp.right >= enemy_tmp.left) {
+                    if (player_tmp.bottom > enemy_tmp.top && player_tmp.top < enemy_tmp.bottom &&
+                        player_tmp.left < enemy_tmp.right && player_tmp.right > enemy_tmp.left) {
+                        this._player.top = this._player.top - 4;
                         collition = true;
                     }
                     break;
@@ -502,63 +551,160 @@ export default class Game {
         return collition;
     }
 
-    chase() {
-        // Calcular la dirección hacia el jugador
-        let dx = this._player.left - this.enemies[0].left;
-        let dy = this._player.top - this.enemies[0].top;
+    // MAP
 
-        // Calcular la distancia al jugador
-        let distance = Math.sqrt(dx * dx + dy * dy);
+    _getMap() {
+        const map = [];
 
-        // Detener al enemigo si está cerca del jugador
-        if (distance <= 100) {
-            this.isChasing = false;
-
-            this._enemyAttack(this.enemies[0]);
-            return;
-        }
-
-        // Normalizar el vector de dirección
-        dx /= distance;
-        dy /= distance;
-
-        // Mover el enemigo en la dirección normalizada y velocidad
-        this._enemies[0].left += dx * this._enemies[0].speedMove;
-        this._enemies[0].top += dy * this._enemies[0].speedMove;
-
-        // Actualizar la dirección del enemigo basada en el movimiento
-        if (Math.abs(dx) > Math.abs(dy)) {
-            if (dx > 0) {
-                this._enemies[0]._direction = 'right';
-            } else {
-                this._enemies[0]._direction = 'left';
-            }
-        } else {
-            if (dy > 0) {
-                this._enemies[0]._direction = 'down';
-            } else {
-                this._enemies[0]._direction = 'up';
+        for (let topQuadrant = 0; topQuadrant < CONFIG_GAME.countHeightQuadrant; topQuadrant++) {
+            map[topQuadrant] = [];
+            for (let leftQuadrant = 0; leftQuadrant < CONFIG_GAME.countWidthQuadrant; leftQuadrant++) {
+                map[topQuadrant][leftQuadrant] = 0;
             }
         }
 
-        // Actualizar el ícono si está definido
-        if (this._enemies[0].icon !== undefined) {
-            switch (this._enemies[0]._direction) {
-                case 'up':
-                    this._enemies[0]._icon.src = this._enemies[0]._icons.up;
-                    break;
-                case 'down':
-                    this._enemies[0]._icon.src = this._enemies[0]._icons.down;
-                    break;
-                case 'left':
-                    this._enemies[0]._icon.src = this._enemies[0]._icons.left;
-                    break;
-                case 'right':
-                    this._enemies[0]._icon.src = this._enemies[0]._icons.right;
-                    break;
-                default:
-                    break;
+        this._blocks.forEach((block) => {
+            const { leftQuadrant, topQuadrant, quadrants } = block;
+            if (leftQuadrant >= 0 && leftQuadrant < CONFIG_GAME.countWidthQuadrant &&
+                topQuadrant >= 0 && topQuadrant < CONFIG_GAME.countHeightQuadrant) {
+                if (quadrants === 2) {
+                    map[topQuadrant][leftQuadrant] = 1;
+                    map[topQuadrant][leftQuadrant + 1] = 1;
+                    map[topQuadrant + 1][leftQuadrant] = 1;
+                    map[topQuadrant + 1][leftQuadrant + 1] = 1;
+                } else if (quadrants === 1) {
+                    map[topQuadrant][leftQuadrant] = 1;
+                }
             }
-        }
+        });
+        
+        return map
     }
+
+
+
+    // _enemyMoveCollition(enemy, move) {
+    //     const { left, top } = enemy;
+
+    //     const leftQuadrant = Math.floor(left / CONFIG_GAME.sizeQuadrant);
+    //     const topQuadrant = Math.floor(top / CONFIG_GAME.sizeQuadrant);
+    //     let collition = false;
+
+    //     // Verificar movimiento hacia arriba
+    //     if (move === 'up') {
+    //         if (topQuadrant > 0 && topQuadrant < this._map.length && leftQuadrant >= 0 && leftQuadrant < this._map[0].length) {
+    //             if (this._map[topQuadrant][leftQuadrant] === 1) {
+    //                 collition = true;
+    //                 this._enemyMoveCollition(enemy, 'down');
+    //             } else {
+    //                 enemy.moveUp();
+    //             }
+    //         }
+    //     }
+
+    //     // Verificar movimiento hacia arriba
+    //     if (move === 'down') {
+    //         if (topQuadrant > 0 && topQuadrant < this._map.length && leftQuadrant >= 0 && leftQuadrant < this._map[0].length) {
+    //             if (this._map[topQuadrant][leftQuadrant] === 1) {
+    //                 collition = true;
+    //                 this._enemyMoveCollition(enemy, 'up');
+    //             } else {
+    //                 enemy.moveDown();
+    //             }
+    //         }
+    //     }
+
+    // console.log(collition)
+    //     return collition;
+    // }
+
+    // _enemyChasePlayer(enemy) {
+    //     let leftDistance = this._player.left - enemy.left;
+    //     let topDistance = this._player.top - enemy.top;
+    //     const distance = Math.sqrt(leftDistance * leftDistance + topDistance * topDistance);
+
+    //     const socialDistance = 50;
+
+    //     const player_tmp = {
+    //         left: this._player.left,
+    //         top: this._player.top,
+    //         right: this._player.left + this._player.width,
+    //         bottom: this._player.top + this._player.height
+    //     }
+
+    //     const enemy_tmp = {
+    //         left: enemy.left,
+    //         top: enemy.top,
+    //         right: enemy.left + enemy.width,
+    //         bottom: enemy.top + enemy.height
+    //     }
+
+    //     if (distance < enemy.distanceObserver) {
+    //         // Jugador está en el rango de observación del enemigo
+
+    //         if (this._ruta !== null) {
+    //             if (this._ruta === 'up') {
+    //                 enemy.moveUp()
+    //             } else if (this._ruta === 'down') {
+    //                 enemy.moveDown()
+    //             }
+    //             if (!this._enemyCollitionBlock(enemy, 'left')) {
+    //                 this._ruta = null
+    //             }
+    //             return;
+    //         }
+
+    //         if (player_tmp.right < enemy_tmp.left || player_tmp.left > enemy_tmp.right) {
+    //             // Jugador esta a la izquierda o derecha del enemigo
+    //             if (player_tmp.top < enemy_tmp.top) {
+    //                 // Jugador está a arriba del enemigo
+    //                 !this._enemyCollitionBlock(enemy, 'up') ? enemy.moveUp() : enemy.direction = 'up';
+    //             } else if (player_tmp.bottom > enemy_tmp.bottom) {
+    //                 // Jugador está abajo del enemigo
+    //                 !this._enemyCollitionBlock(enemy, 'down') ? enemy.moveDown() : enemy.direction = 'down';
+    //             } else {
+    //                 if ((player_tmp.right + socialDistance) < enemy_tmp.left) {
+    //                     // Jugador está a la izquierda del enemigo
+    //                     if (!this._enemyCollitionBlock(enemy, 'left')) {
+    //                         enemy.moveLeft()
+    //                     } else {
+    //                         // buscar otra ruta
+    //                         if (player_tmp.top < enemy_tmp.top) {
+    //                             this._ruta = 'up'
+    //                         } else {
+    //                             this._ruta = 'down'
+    //                         }
+    //                     }
+    //                 } else if ((player_tmp.left - socialDistance) > enemy_tmp.right) {
+    //                     // Jugador está a la derecha del enemigo      
+    //                     !this._enemyCollitionBlock(enemy, 'right') ? enemy.moveRight() : enemy.direction = 'right';
+    //                 } else {
+    //                     // Jugador esta en el mismo eje X del enemigo
+    //                     enemy.direction = player_tmp.right < enemy_tmp.left ? 'left' : 'right';
+    //                 }
+
+    //                 if (distance < enemy.distanceShot) this._enemyAttack(enemy);
+    //             }
+    //         } else {
+    //             // Jugador esta arriba o abajo del enemigo
+    //             if ((player_tmp.bottom + socialDistance) < enemy_tmp.top) {
+    //                 // Jugador está a arriba del enemigo
+    //                 !this._enemyCollitionBlock(enemy, 'up') ? enemy.moveUp() : enemy.direction = 'up';
+    //             } else if ((player_tmp.top - socialDistance) > enemy_tmp.bottom) {
+    //                 // Jugador está abajo del enemigo
+    //                 !this._enemyCollitionBlock(enemy, 'down') ? enemy.moveDown() : enemy.direction = 'down';
+    //             } else {
+    //                 // Jugador esta en el mismo eje Y del enemigo
+    //                 enemy.direction = player_tmp.bottom < enemy_tmp.top ? 'up' : 'down';
+    //             }
+
+    //             if (distance < enemy.distanceShot) this._enemyAttack(enemy);
+    //         }
+
+    //         return;
+    //     }
+
+    //     // console.log('lejos')
+    // }
+
 }
