@@ -37,9 +37,11 @@ export const ENEMIES = {
         top: 0,
         color: 'red',
         health: 100,
-        speedMove: 1,
+        speedMove: 0.5,
         direction: 'down',
         delayShoot: 3000,
+        distanceObserver: 300,
+        distanceShot: 200,
         icon: {
             up: '/public/img/characters/enemy_a/enemy_up.svg',
             down: '/public/img/characters/enemy_a/enemy_down.svg',
@@ -106,6 +108,6 @@ export const CONFIG_ATTACK = {
     width: 10,
     height: 2,
     color: 'white',
-    speedMove: 5,
+    speedMove: 3,
     damage: 50
 }

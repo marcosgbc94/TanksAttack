@@ -75,7 +75,7 @@ export default class Game {
         if (this._enemies.length > 0) {
             this._enemies.map((enemy) => {
                 this.renderEnemy(enemy);
-                this.chase();
+                this._enemyChasePlayer(enemy);
             });
         }
 
@@ -92,6 +92,7 @@ export default class Game {
         if (event.code === 'Space') {
             this._playerAttack();
         } else {
+            this._keys = [];
             this._keys[event.key] = true;
         }
     }
@@ -257,16 +258,20 @@ export default class Game {
         }
 
         if (attack_tmp.top < -attack.height || attack_tmp.bottom > this._height || attack_tmp.left < 0 || attack_tmp.right > this._width) {
-            return true; // Indica que hay colisión
+            return true; // Indica que hay colisiï¿½n
         }
 
         if (this._AttackCollitionBlock(attack)) {
-            return true; // Indica que hay colisión
+            return true; // Indica que hay colisiï¿½n
         }
 
         if (attack.player) {
             if (this._AttackCollitionEnemy(attack)) {
-                return true; // Indica que hay colisión
+                return true; // Indica que hay colisiï¿½n
+            }
+        } else {
+            if (this._AttackCollitionPlayer(attack)) {
+                return true; // Indica que hay colisiï¿½n
             }
         }
 
@@ -376,6 +381,47 @@ export default class Game {
         return collition;
     }
 
+    _AttackCollitionPlayer(attack) {
+        let collition = false;
+
+        const attack_tmp = {
+            left: attack.left,
+            right: attack.left + attack.width,
+            top: attack.top,
+            bottom: attack.top + attack.height
+        };
+
+        const player_tmp = {
+            left: this._player.left,
+            right: this._player.left + this._player.width,
+            top: this._player.top,
+            bottom: this._player.top + this._player.height
+        };
+
+        if (attack_tmp.left <= player_tmp.right && attack_tmp.right >= player_tmp.left &&
+            attack_tmp.top <= player_tmp.bottom && attack_tmp.bottom >= player_tmp.top) {
+            collition = true;
+        } else if (attack_tmp.right >= player_tmp.left && attack_tmp.left <= player_tmp.right &&
+            attack_tmp.top <= player_tmp.bottom && attack_tmp.bottom >= player_tmp.top) {
+            collition = true;
+        } else if (attack_tmp.top <= player_tmp.bottom && attack_tmp.bottom >= player_tmp.top &&
+            attack_tmp.left <= player_tmp.right && attack_tmp.right >= player_tmp.left) {
+            collition = true;
+        } else if (attack_tmp.bottom >= player_tmp.top && attack_tmp.top <= player_tmp.bottom &&
+            attack_tmp.left <= player_tmp.right && attack_tmp.right >= player_tmp.left) {
+            collition = true;
+        }
+
+        if (collition) {
+            this._player.attacked(attack.damage);
+            if (this._player.health === 0) {
+                alert('HÃ­jole!! perdiÃ³ mi niÃ±o/a, a llorar al rincon :)');
+            }
+        }
+
+        return collition;
+    }
+
     _playerCollitionBlock(move) {
         let collition = false;
         const playerSpeedMove = (this._player.speedMove / 2);
@@ -431,6 +477,70 @@ export default class Game {
 
                     if (player_tmp.bottom >= block_tmp.top && player_tmp.top <= block_tmp.bottom &&
                         player_tmp.left <= block_tmp.right && player_tmp.right >= block_tmp.left) {
+                        collition = true;
+                    }
+                    break;
+            }
+        });
+
+        return collition;
+    }
+
+    _enemyCollitionBlock(enemy, move) {
+        let collition = false;
+        const enemySpeedMove = (enemy.speedMove / 2);
+
+        const enemy_tmp = {
+            left: enemy.left,
+            right: enemy.left + enemy.width,
+            top: enemy.top,
+            bottom: enemy.top + enemy.height
+        };
+
+        this._blocks.map((block) => {
+            if (!block.collidable) return;
+
+            const block_tmp = {
+                left: block.left,
+                right: block.left + block.width,
+                top: block.top,
+                bottom: block.top + block.height
+            };
+
+            switch (move) {
+                case 'left':
+                    enemy_tmp.left -= enemySpeedMove;
+                    enemy_tmp.right -= enemySpeedMove;
+
+                    if (enemy_tmp.left <= block_tmp.right && enemy_tmp.right >= block_tmp.left &&
+                        enemy_tmp.top <= block_tmp.bottom && enemy_tmp.bottom >= block_tmp.top) {
+                        collition = true;
+                    }
+                    break;
+                case 'right':
+                    enemy_tmp.left += enemySpeedMove;
+                    enemy_tmp.right += enemySpeedMove;
+
+                    if (enemy_tmp.right >= block_tmp.left && enemy_tmp.left <= block_tmp.right &&
+                        enemy_tmp.top <= block_tmp.bottom && enemy_tmp.bottom >= block_tmp.top) {
+                        collition = true;
+                    }
+                    break;
+                case 'up':
+                    enemy_tmp.top -= enemySpeedMove;
+                    enemy_tmp.bottom -= enemySpeedMove;
+
+                    if (enemy_tmp.top <= block_tmp.bottom && enemy_tmp.bottom >= block_tmp.top &&
+                        enemy_tmp.left <= block_tmp.right && enemy_tmp.right >= block_tmp.left) {
+                        collition = true;
+                    }
+                    break;
+                case 'down':
+                    enemy_tmp.top += enemySpeedMove;
+                    enemy_tmp.bottom += enemySpeedMove;
+
+                    if (enemy_tmp.bottom >= block_tmp.top && enemy_tmp.top <= block_tmp.bottom &&
+                        enemy_tmp.left <= block_tmp.right && enemy_tmp.right >= block_tmp.left) {
                         collition = true;
                     }
                     break;
@@ -502,63 +612,71 @@ export default class Game {
         return collition;
     }
 
-    chase() {
-        // Calcular la dirección hacia el jugador
-        let dx = this._player.left - this.enemies[0].left;
-        let dy = this._player.top - this.enemies[0].top;
+    _enemyChasePlayer(enemy) {
+        let leftDistance = this._player.left - enemy.left;
+        let topDistance = this._player.top - enemy.top;
+        const distance = Math.sqrt(leftDistance * leftDistance + topDistance * topDistance);
 
-        // Calcular la distancia al jugador
-        let distance = Math.sqrt(dx * dx + dy * dy);
+        const socialDistance = 50;
 
-        // Detener al enemigo si está cerca del jugador
-        if (distance <= 100) {
-            this.isChasing = false;
+        const player_tmp = {
+            left: this._player.left,
+            top: this._player.top,
+            right: this._player.left + this._player.width,
+            bottom: this._player.top + this._player.height
+        }
 
-            this._enemyAttack(this.enemies[0]);
+        const enemy_tmp = {
+            left: enemy.left,
+            top: enemy.top,
+            right: enemy.left + enemy.width,
+            bottom: enemy.top + enemy.height
+        }
+
+        if (distance < enemy.distanceObserver) {
+            // Jugador estÃ¡ en el rango de observaciÃ³n del enemigo
+
+            if (player_tmp.right < enemy_tmp.left || player_tmp.left > enemy_tmp.right) {
+                // Jugador esta a la izquierda o derecha del enemigo
+                if (player_tmp.top < enemy_tmp.top) {
+                    // Jugador estÃ¡ a arriba del enemigo
+                    !this._enemyCollitionBlock(enemy, 'up') ? enemy.moveUp() : enemy.direction = 'up';
+                } else if (player_tmp.bottom > enemy_tmp.bottom) {
+                    // Jugador estÃ¡ abajo del enemigo
+                    !this._enemyCollitionBlock(enemy, 'down') ? enemy.moveDown() : enemy.direction = 'down';
+                } else {
+                    if ((player_tmp.right + socialDistance) < enemy_tmp.left) {
+                        // Jugador estÃ¡ a la izquierda del enemigo
+                        !this._enemyCollitionBlock(enemy, 'left') ? enemy.moveLeft() : enemy.direction = 'left';
+                    } else if ((player_tmp.left - socialDistance) > enemy_tmp.right) {
+                        // Jugador estÃ¡ a la derecha del enemigo      
+                        !this._enemyCollitionBlock(enemy, 'right') ? enemy.moveRight() : enemy.direction = 'right';
+                    } else {
+                        // Jugador esta en el mismo eje X del enemigo
+                        enemy.direction = player_tmp.right < enemy_tmp.left ? 'left' : 'right';
+                    }
+
+                    if (distance < enemy.distanceShot) this._enemyAttack(enemy);
+                }
+            } else {
+                // Jugador esta arriba o abajo del enemigo
+                if ((player_tmp.bottom + socialDistance) < enemy_tmp.top) {
+                    // Jugador estÃ¡ a arriba del enemigo
+                    !this._enemyCollitionBlock(enemy, 'up') ? enemy.moveUp() : enemy.direction = 'up';
+                } else if ((player_tmp.top - socialDistance) > enemy_tmp.bottom) {
+                    // Jugador estÃ¡ abajo del enemigo
+                    !this._enemyCollitionBlock(enemy, 'down') ? enemy.moveDown() : enemy.direction = 'down';
+                } else {
+                    // Jugador esta en el mismo eje Y del enemigo
+                    enemy.direction = player_tmp.bottom < enemy_tmp.top ? 'up' : 'down';
+                }
+
+                if (distance < enemy.distanceShot) this._enemyAttack(enemy);
+            }
+
             return;
         }
 
-        // Normalizar el vector de dirección
-        dx /= distance;
-        dy /= distance;
-
-        // Mover el enemigo en la dirección normalizada y velocidad
-        this._enemies[0].left += dx * this._enemies[0].speedMove;
-        this._enemies[0].top += dy * this._enemies[0].speedMove;
-
-        // Actualizar la dirección del enemigo basada en el movimiento
-        if (Math.abs(dx) > Math.abs(dy)) {
-            if (dx > 0) {
-                this._enemies[0]._direction = 'right';
-            } else {
-                this._enemies[0]._direction = 'left';
-            }
-        } else {
-            if (dy > 0) {
-                this._enemies[0]._direction = 'down';
-            } else {
-                this._enemies[0]._direction = 'up';
-            }
-        }
-
-        // Actualizar el ícono si está definido
-        if (this._enemies[0].icon !== undefined) {
-            switch (this._enemies[0]._direction) {
-                case 'up':
-                    this._enemies[0]._icon.src = this._enemies[0]._icons.up;
-                    break;
-                case 'down':
-                    this._enemies[0]._icon.src = this._enemies[0]._icons.down;
-                    break;
-                case 'left':
-                    this._enemies[0]._icon.src = this._enemies[0]._icons.left;
-                    break;
-                case 'right':
-                    this._enemies[0]._icon.src = this._enemies[0]._icons.right;
-                    break;
-                default:
-                    break;
-            }
-        }
+        // console.log('lejos')
     }
 }

@@ -51,6 +51,16 @@ export default class Character {
         }
     }
 
+    set direction(newDirection) {
+        if (typeof newDirection === 'string') {
+            this._direction = newDirection;
+
+            if (this._icon && this._icons) {
+                this._icon.src = this._icons[newDirection];
+            }
+        }
+    }
+
     moveUp() {
         this._top -= this._speedMove;
         this._direction = 'up';
