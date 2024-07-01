@@ -21,7 +21,15 @@ export default class Game {
         window.addEventListener('keydown', this._handleKeyDown.bind(this));
         window.addEventListener('keyup', this._handleKeyUp.bind(this));
 
+        worker.addEventListener('message', this._na.bind(this))
+
+
         this._init();
+    }
+
+    _na(e) {
+        let path = e.data;
+        this._holinda(path);
     }
 
     get gameContainer() { return this._gameContainer; }
@@ -52,7 +60,7 @@ export default class Game {
     }
 
     start() {
-        this._map = this._getMap();
+        this._map = this._getMap(true);
         this._loop();
     }
 
@@ -164,21 +172,25 @@ export default class Game {
             if (this._player.top > 0 && !this._playerCollitionBlock('up') && !this._playerCollitionEnemy('up')) {
                 this._player.audioPlay('move');
                 this._player.moveUp();
+                this._map = this._getMap();
             }
         } else if (this._keys['ArrowDown'] || this._keys['s']) {
             if ((this._player.top + this._player.height) < this._height && !this._playerCollitionBlock('down') && !this._playerCollitionEnemy('down')) {
                 this._player.audioPlay('move');
                 this._player.moveDown();
+                this._map = this._getMap();
             }
         } else if (this._keys['ArrowLeft'] || this._keys['a']) {
             if (this._player.left > 0 && !this._playerCollitionBlock('left') && !this._playerCollitionEnemy('left')) {
                 this._player.audioPlay('move');
                 this._player.moveLeft();
+                this._map = this._getMap();
             }
         } else if (this._keys['ArrowRight'] || this._keys['d']) {
             if ((this._player.left + this._player.width) < this._width && !this._playerCollitionBlock('right') && !this._playerCollitionEnemy('right')) {
                 this._player.audioPlay('move');
                 this._player.moveRight();
+                this._map = this._getMap();
             }
         }
     }
@@ -334,7 +346,7 @@ export default class Game {
                     block.attacked(attack.damage);
                     if (block.health === 0) {
                         this._blocks.splice(index, 1);
-                        this._map = this._getMap();
+                        this._map = this._getMap(true);
                     }
                 }
             }
@@ -619,75 +631,79 @@ export default class Game {
     }
 
     _enemyChasePlayer(enemy) {
-        let leftDistance = this._player.left - enemy.left;
-        let topDistance = this._player.top - enemy.top;
-        const distance = Math.sqrt(leftDistance * leftDistance + topDistance * topDistance);
+        // let leftDistance = this._player.left - enemy.left;
+        // let topDistance = this._player.top - enemy.top;
+        // const distance = Math.sqrt(leftDistance * leftDistance + topDistance * topDistance);
 
-        const socialDistance = 50;
+        // const socialDistance = 50;
 
-        const player_tmp = {
-            left: this._player.left,
-            top: this._player.top,
-            right: this._player.left + this._player.width,
-            bottom: this._player.top + this._player.height
-        }
+        // const player_tmp = {
+        //     left: this._player.left,
+        //     top: this._player.top,
+        //     right: this._player.left + this._player.width,
+        //     bottom: this._player.top + this._player.height
+        // }
 
-        const enemy_tmp = {
-            left: enemy.left,
-            top: enemy.top,
-            right: enemy.left + enemy.width,
-            bottom: enemy.top + enemy.height
-        }
+        // const enemy_tmp = {
+        //     left: enemy.left,
+        //     top: enemy.top,
+        //     right: enemy.left + enemy.width,
+        //     bottom: enemy.top + enemy.height
+        // }
 
-        if (distance < enemy.distanceObserver) {
-            // Jugador está en el rango de observación del enemigo
+        // if (distance < enemy.distanceObserver) {
+        //     // Jugador está en el rango de observación del enemigo
 
-            if (player_tmp.right < enemy_tmp.left || player_tmp.left > enemy_tmp.right) {
-                // Jugador esta a la izquierda o derecha del enemigo
-                if (player_tmp.top < enemy_tmp.top) {
-                    // Jugador está a arriba del enemigo
-                    !this._enemyCollitionBlock(enemy, 'up') ? enemy.moveUp() : enemy.direction = 'up';
-                } else if (player_tmp.bottom > enemy_tmp.bottom) {
-                    // Jugador está abajo del enemigo
-                    !this._enemyCollitionBlock(enemy, 'down') ? enemy.moveDown() : enemy.direction = 'down';
-                } else {
-                    if ((player_tmp.right + socialDistance) < enemy_tmp.left) {
-                        // Jugador está a la izquierda del enemigo
-                        !this._enemyCollitionBlock(enemy, 'left') ? enemy.moveLeft() : enemy.direction = 'left';
-                    } else if ((player_tmp.left - socialDistance) > enemy_tmp.right) {
-                        // Jugador está a la derecha del enemigo      
-                        !this._enemyCollitionBlock(enemy, 'right') ? enemy.moveRight() : enemy.direction = 'right';
-                    } else {
-                        // Jugador esta en el mismo eje X del enemigo
-                        enemy.direction = player_tmp.right < enemy_tmp.left ? 'left' : 'right';
-                    }
+        //     if (player_tmp.right < enemy_tmp.left || player_tmp.left > enemy_tmp.right) {
+        //         // Jugador esta a la izquierda o derecha del enemigo
+        //         if (player_tmp.top < enemy_tmp.top) {
+        //             // Jugador está a arriba del enemigo
+        //             !this._enemyCollitionBlock(enemy, 'up') ? enemy.moveUp() : enemy.direction = 'up';
+        //         } else if (player_tmp.bottom > enemy_tmp.bottom) {
+        //             // Jugador está abajo del enemigo
+        //             !this._enemyCollitionBlock(enemy, 'down') ? enemy.moveDown() : enemy.direction = 'down';
+        //         } else {
+        //             if ((player_tmp.right + socialDistance) < enemy_tmp.left) {
+        //                 // Jugador está a la izquierda del enemigo
+        //                 !this._enemyCollitionBlock(enemy, 'left') ? enemy.moveLeft() : enemy.direction = 'left';
+        //             } else if ((player_tmp.left - socialDistance) > enemy_tmp.right) {
+        //                 // Jugador está a la derecha del enemigo      
+        //                 !this._enemyCollitionBlock(enemy, 'right') ? enemy.moveRight() : enemy.direction = 'right';
+        //             } else {
+        //                 // Jugador esta en el mismo eje X del enemigo
+        //                 enemy.direction = player_tmp.right < enemy_tmp.left ? 'left' : 'right';
+        //             }
 
-                    if (distance < enemy.distanceShot) this._enemyAttack(enemy);
-                }
-            } else {
-                // Jugador esta arriba o abajo del enemigo
-                if ((player_tmp.bottom + socialDistance) < enemy_tmp.top) {
-                    // Jugador está a arriba del enemigo
-                    !this._enemyCollitionBlock(enemy, 'up') ? enemy.moveUp() : enemy.direction = 'up';
-                } else if ((player_tmp.top - socialDistance) > enemy_tmp.bottom) {
-                    // Jugador está abajo del enemigo
-                    !this._enemyCollitionBlock(enemy, 'down') ? enemy.moveDown() : enemy.direction = 'down';
-                } else {
-                    // Jugador esta en el mismo eje Y del enemigo
-                    enemy.direction = player_tmp.bottom < enemy_tmp.top ? 'up' : 'down';
-                }
+        //             if (distance < enemy.distanceShot) this._enemyAttack(enemy);
+        //         }
+        //     } else {
+        //         // Jugador esta arriba o abajo del enemigo
+        //         if ((player_tmp.bottom + socialDistance) < enemy_tmp.top) {
+        //             // Jugador está a arriba del enemigo
+        //             !this._enemyCollitionBlock(enemy, 'up') ? enemy.moveUp() : enemy.direction = 'up';
+        //         } else if ((player_tmp.top - socialDistance) > enemy_tmp.bottom) {
+        //             // Jugador está abajo del enemigo
+        //             !this._enemyCollitionBlock(enemy, 'down') ? enemy.moveDown() : enemy.direction = 'down';
+        //         } else {
+        //             // Jugador esta en el mismo eje Y del enemigo
+        //             enemy.direction = player_tmp.bottom < enemy_tmp.top ? 'up' : 'down';
+        //         }
 
-                if (distance < enemy.distanceShot) this._enemyAttack(enemy);
-            }
+        //         if (distance < enemy.distanceShot) this._enemyAttack(enemy);
+        //     }
 
-            return;
-        }
+        //     this._map = this._getMap();
 
-        
+        //     return;
+        // }
+
+        this._map = this._getMap();
+
+        this._hola()
     }
 
-    _getMap() {
-        const map = [];
+    _getMap(updateBlocks = false) {
+        let map = [];
 
         for (let topQuadrant = 0; topQuadrant < CONFIG_GAME.countHeightQuadrant; topQuadrant++) {
             map[topQuadrant] = [];
@@ -696,13 +712,21 @@ export default class Game {
             }
         }
 
+        if (updateBlocks) map = this._setBlocksInnerMap(map);
+        map = this._setPlayerInnerMap(map);
+        map = this._setEnemyInnerMap(map);
+
+        return map
+    }
+
+    _setBlocksInnerMap(map) {
         this._blocks.forEach((block) => {
             const { leftQuadrant, topQuadrant, quadrants, collidable } = block;
             if (leftQuadrant >= 0 && leftQuadrant < CONFIG_GAME.countWidthQuadrant &&
                 topQuadrant >= 0 && topQuadrant < CONFIG_GAME.countHeightQuadrant && collidable) {
                 if (quadrants === 2) {
                     map[topQuadrant][leftQuadrant] = 1;
-                    map[topQuadrant][leftQuadrant + 1] = 1;
+                    map[topQuadrant][leftQuadrant] = 1;
                     map[topQuadrant + 1][leftQuadrant] = 1;
                     map[topQuadrant + 1][leftQuadrant + 1] = 1;
                 } else if (quadrants === 1) {
@@ -710,7 +734,98 @@ export default class Game {
                 }
             }
         });
-        
-        return map
+
+        return map;
     }
+
+    _setPlayerInnerMap(map) {
+        if (this._player.leftQuadrant >= 0 && this._player.leftQuadrant < CONFIG_GAME.countWidthQuadrant &&
+            this._player.topQuadrant >= 0 && this._player.topQuadrant < CONFIG_GAME.countHeightQuadrant) {
+            map[this._player.topQuadrant][this._player.leftQuadrant] = 3;
+        }
+
+        return map;
+    }
+
+    _setEnemyInnerMap(map) {
+        this._enemies.forEach((enemy) => {
+            const { leftQuadrant, topQuadrant, quadrants } = enemy;
+            if (leftQuadrant >= 0 && leftQuadrant < CONFIG_GAME.countWidthQuadrant &&
+                topQuadrant >= 0 && topQuadrant < CONFIG_GAME.countHeightQuadrant) {
+                map[topQuadrant][leftQuadrant] = 2;
+            }
+        });
+
+        return map;
+    }
+
+    _hola() {
+        const enemgos = [];
+        this._enemies.forEach((enemy) => {
+            enemgos.push(new Node(enemy.leftQuadrant, enemy.topQuadrant, 2));
+        });
+
+        let player = new Node(this._player.leftQuadrant, this._player.topQuadrant, 3);
+
+        startAStarSearch(this._map, player, enemgos);
+    }
+
+    _holinda(path) {
+        this._enemies.forEach((enemy, index) => {
+            path[index].forEach((eros) => {
+                const { leftQuadrant, topQuadrant } = enemy;
+                if (eros.x > leftQuadrant + 1) {
+                    enemy.moveRight();
+                    return;
+                } else if (eros.x < leftQuadrant - 1) {
+                    enemy.moveLeft();
+                    return;
+                }
+
+                if (eros.y > topQuadrant + 1) {
+                    enemy.moveDown();
+                    return;
+                } else if (eros.y < topQuadrant - 1) {
+                    enemy.moveUp();
+                    return;
+                }
+
+            });
+        });
+    }
+}
+
+
+
+
+// Definición de un nodo en el grafo
+class Node {
+    constructor(x, y, type) {
+        this.x = x; // Posición x del nodo
+        this.y = y; // Posición y del nodo
+        this.type = type; // Tipo de nodo: 0 (camino), 1 (obstáculo), 2 (enemigo), 3 (jugador)
+        this.g = 0; // Costo desde el nodo inicial hasta este nodo
+        this.h = 0; // Heurística: estimación del costo desde este nodo hasta el nodo objetivo
+        this.f = 0; // f = g + h, costo total estimado del camino a través de este nodo
+        this.parent = null; // Nodo padre en el camino óptimo
+    }
+
+    // Método para calcular la distancia heurística a otro nodo (distancia Manhattan)
+    heuristic(otherNode) {
+        return Math.abs(this.x - otherNode.x) + Math.abs(this.y - otherNode.y);
+    }
+}
+
+// En el archivo principal
+let worker = new Worker('/src/worker.js');
+
+// Función para iniciar la búsqueda del camino
+function startAStarSearch(yourGridData, playerPosition, enemyPosition) {
+    let data = {
+        grid: yourGridData,
+        player: playerPosition,
+        enemies: enemyPosition
+    };
+
+    worker.postMessage(data);
 }

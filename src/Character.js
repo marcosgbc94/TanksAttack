@@ -34,6 +34,8 @@ export default class Character {
     get height() { return this._height; }
     get left() { return this._left; }
     get top() { return this._top; }
+    get leftQuadrant() { return this._leftQuadrant; }
+    get topQuadrant() { return this._topQuadrant; }
     get color() { return this._color; }
     get health() { return this._health; }
     get delayShoot() { return this._delayShoot; }
@@ -66,6 +68,7 @@ export default class Character {
 
     moveUp() {
         this._top -= this._speedMove;
+        this._topQuadrant = Math.floor(this._top / CONFIG_GAME.sizeQuadrant);
         this._direction = 'up';
         if (this._icon && this._icons) {
             this._icon.src = this._icons.up;
@@ -74,6 +77,7 @@ export default class Character {
 
     moveDown() {
         this._top += this._speedMove;
+        this._topQuadrant = Math.floor(this._top / CONFIG_GAME.sizeQuadrant);
         this._direction = 'down';
         if (this._icon && this._icons) {
             this._icon.src = this._icons.down;
@@ -82,6 +86,7 @@ export default class Character {
 
     moveLeft() {
         this._left -= this._speedMove;
+        this._leftQuadrant = Math.floor(this._left / CONFIG_GAME.sizeQuadrant);
         this._direction = 'left';
         if (this._icon && this._icons) {
             this._icon.src = this._icons.left;
@@ -90,6 +95,7 @@ export default class Character {
 
     moveRight() {
         this._left += this._speedMove;
+        this._leftQuadrant = Math.floor(this._left / CONFIG_GAME.sizeQuadrant);
         this._direction = 'right';
         if (this._icon && this._icons) {
             this._icon.src = this._icons.right;

@@ -5,6 +5,7 @@ import Block from './Block.js';
 import Enemy from './Enemy.js';
 import { LEVEL_1_BLOCKS, LEVEL_1_ENEMIES } from './level_1.js';
 
+let worker = new Worker('/src/worker.js');
 window.addEventListener('load', () => {
     const game = new Game(CONFIG_GAME);
 
@@ -19,4 +20,9 @@ window.addEventListener('load', () => {
     game.player = new Player(CONFIG_PLAYER);
 
     game.start();
+    
 });
+
+  // En el archivo principal
+  
+ 

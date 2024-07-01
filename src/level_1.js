@@ -12,4 +12,5 @@ export const LEVEL_1_BLOCKS = [
     { material: 4, leftQuadrant: 4, topQuadrant: 4 },
     { material: 3, leftQuadrant: 4, topQuadrant: 6 },
     { material: 3, leftQuadrant: 4, topQuadrant: 8 },
+    { material: 3, leftQuadrant: 4, topQuadrant: 10 },
 ]
