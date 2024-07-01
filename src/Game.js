@@ -164,21 +164,25 @@ export default class Game {
             if (this._player.top > 0 && !this._playerCollitionBlock('up') && !this._playerCollitionEnemy('up')) {
                 this._player.audioPlay('move');
                 this._player.moveUp();
+                this._getMap(false, false, true);
             }
         } else if (this._keys['ArrowDown'] || this._keys['s']) {
             if ((this._player.top + this._player.height) < this._height && !this._playerCollitionBlock('down') && !this._playerCollitionEnemy('down')) {
                 this._player.audioPlay('move');
                 this._player.moveDown();
+                this._getMap(false, false, true);
             }
         } else if (this._keys['ArrowLeft'] || this._keys['a']) {
             if (this._player.left > 0 && !this._playerCollitionBlock('left') && !this._playerCollitionEnemy('left')) {
                 this._player.audioPlay('move');
                 this._player.moveLeft();
+                this._getMap(false, false, true);
             }
         } else if (this._keys['ArrowRight'] || this._keys['d']) {
             if ((this._player.left + this._player.width) < this._width && !this._playerCollitionBlock('right') && !this._playerCollitionEnemy('right')) {
                 this._player.audioPlay('move');
                 this._player.moveRight();
+                this._getMap(false, false, true);
             }
         }
     }
@@ -305,7 +309,7 @@ export default class Game {
             bottom: attack.top + attack.height
         };
 
-        this._blocks.map((block, index) => {
+        this._blocks.forEach((block, index) => {
             if (!block.collidable) return;
 
             if (!collition) {
@@ -331,16 +335,20 @@ export default class Game {
                 }
 
                 if (collition) {
-                    block.attacked(attack.damage);
-                    if (block.health === 0) {
-                        this._blocks.splice(index, 1);
-                        this._map = this._getMap();
-                    }
+                    this._blockAttacked(block, index, attack);
                 }
             }
         });
 
         return collition;
+    }
+
+    _blockAttacked(block, blockIndex, attack) {
+        block.attacked(attack.damage);
+        if (block.health === 0) {
+            this._blocks.splice(blockIndex, 1);
+            this._getMap(true, false, false);
+        }
     }
 
     _AttackCollitionEnemy(attack) {
@@ -377,13 +385,19 @@ export default class Game {
                 }
 
                 if (collition) {
-                    enemy.attacked(attack.damage);
-                    if (enemy.health === 0) this._enemies.splice(index, 1);
+                    this._enemyAttacked(enemy, index, attack);
                 }
             }
         });
 
         return collition;
+    }
+    _enemyAttacked(enemy, enemyIndex, attack) {
+        enemy.attacked(attack.damage);
+        if (enemy.health === 0) {
+            this._enemies.splice(enemyIndex, 1);
+            this._getMap(false, true, false);
+        }
     }
 
     _AttackCollitionPlayer(attack) {
@@ -418,14 +432,18 @@ export default class Game {
         }
 
         if (collition) {
-            this._player.attacked(attack.damage);
-            if (this._player.health === 0) {
-                this._player = null;
-                alert('Híjole!! perdió mi niño/a, a llorar al rincon :)');
-            }
+            this._playerAttacked(attack);
         }
 
         return collition;
+    }
+
+    _playerAttacked(attack) {
+        this._player.attacked(attack.damage);
+        if (this._player.health === 0) {
+            this._player = null;
+            alert('Híjole!! perdió mi niño/a, a llorar al rincon :)');
+        }
     }
 
     _playerCollitionBlock(move) {
@@ -680,14 +698,15 @@ export default class Game {
                 if (distance < enemy.distanceShot) this._enemyAttack(enemy);
             }
 
+            this._getMap(false, true, false);
             return;
         }
 
         
     }
 
-    _getMap() {
-        const map = [];
+    _getMap(updateBlocks = false, updateEnemies = true, updatePlayer = true) {
+        let map = [];
 
         for (let topQuadrant = 0; topQuadrant < CONFIG_GAME.countHeightQuadrant; topQuadrant++) {
             map[topQuadrant] = [];
@@ -696,13 +715,21 @@ export default class Game {
             }
         }
 
+        if (updateBlocks) map = this._setBlocksInnerMap(map);
+        if (updateEnemies) map = this._setEnemyInnerMap(map);
+        if (updatePlayer) map = this._setPlayerInnerMap(map);
+
+        return map
+    }
+
+    _setBlocksInnerMap(map) {
         this._blocks.forEach((block) => {
             const { leftQuadrant, topQuadrant, quadrants, collidable } = block;
             if (leftQuadrant >= 0 && leftQuadrant < CONFIG_GAME.countWidthQuadrant &&
                 topQuadrant >= 0 && topQuadrant < CONFIG_GAME.countHeightQuadrant && collidable) {
                 if (quadrants === 2) {
                     map[topQuadrant][leftQuadrant] = 1;
-                    map[topQuadrant][leftQuadrant + 1] = 1;
+                    map[topQuadrant][leftQuadrant] = 1;
                     map[topQuadrant + 1][leftQuadrant] = 1;
                     map[topQuadrant + 1][leftQuadrant + 1] = 1;
                 } else if (quadrants === 1) {
@@ -710,7 +737,28 @@ export default class Game {
                 }
             }
         });
-        
-        return map
+
+        return map;
+    }
+
+    _setPlayerInnerMap(map) {
+        if (this._player.leftQuadrant >= 0 && this._player.leftQuadrant < CONFIG_GAME.countWidthQuadrant &&
+            this._player.topQuadrant >= 0 && this._player.topQuadrant < CONFIG_GAME.countHeightQuadrant) {
+            map[this._player.topQuadrant][this._player.leftQuadrant] = 3;
+        }
+
+        return map;
+    }
+
+    _setEnemyInnerMap(map) {
+        this._enemies.forEach((enemy) => {
+            const { leftQuadrant, topQuadrant, quadrants } = enemy;
+            if (leftQuadrant >= 0 && leftQuadrant < CONFIG_GAME.countWidthQuadrant &&
+                topQuadrant >= 0 && topQuadrant < CONFIG_GAME.countHeightQuadrant) {
+                map[topQuadrant][leftQuadrant] = 2;
+            }
+        });
+
+        return map;
     }
 }
